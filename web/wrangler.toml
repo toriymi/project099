@@ -1,0 +1,6 @@
+name = "toriymi-site"
+compatibility_date = "2026-11-07"
+pages_build_output_dir = "./dist"
+
+[vars]
+LASTFM_USERNAME = "omnipotence88"
