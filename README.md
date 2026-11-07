@@ -14,4 +14,4 @@ A deep black background with a soft blue-violet glow. Accents are in lavender an
 
 Thanks to [z3n](https://github.com/z3nghoul) for the help in building the site.
 
-🌐 Website: https://toriymi.github.io/site/
+🌐 Website: https://toriymi.github.io/project099/
