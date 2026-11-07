@@ -106,8 +106,21 @@
           <span class="social-arrow" aria-hidden="true">↗</span>
         </a>
       </nav>
-
-      <p class="landing-footer"><span class="footer-signal" aria-hidden="true"></span> CHANNELS OPEN <span class="slash">//</span> CHOOSE A FREQUENCY</p>
     </main>
+
+    <aside class="debug-panel" id="debug-panel" aria-label="Панель отладки" aria-hidden="true" hidden inert>
+      <div class="debug-panel-heading">
+        <span>DEBUG MODE <span class="slash">//</span> VISUAL TEST</span>
+        <button class="debug-panel-close" id="debug-panel-close" type="button" aria-label="Закрыть панель отладки">×</button>
+      </div>
+      <div class="debug-panel-body">
+        <div class="debug-panel-copy"><strong>FIREWORKS</strong><small>Preview birthday fireworks</small></div>
+        <button class="debug-toggle" id="fireworks-test" type="button">LAUNCH</button>
+      </div>
+    </aside>
+    <button class="debug-launcher" id="debug-panel-toggle" type="button" aria-label="Открыть панель отладки" aria-expanded="false" hidden>
+      <img src="./assets/debug-button.png" alt="" />
+      <span class="debug-launcher-label" aria-hidden="true">DBG</span>
+    </button>
   </body>
 </html>

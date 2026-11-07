@@ -133,6 +133,11 @@ const birthdaySubtitle = document.querySelector("#landing-subtitle");
 const birthdayFireworksCanvas = document.querySelector("#birthday-fireworks");
 const birthdayFireworksContext = birthdayFireworksCanvas?.getContext("2d");
 const birthdayReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const debugPanel = document.querySelector("#debug-panel");
+const debugPanelToggle = document.querySelector("#debug-panel-toggle");
+const debugPanelClose = document.querySelector("#debug-panel-close");
+const fireworksTestButton = document.querySelector("#fireworks-test");
+const debugMode = new URLSearchParams(window.location.search).get("debug") === "1";
 const moscowDateFormatter = new Intl.DateTimeFormat("en-US", {
   calendar: "gregory",
   timeZone: "Europe/Moscow",
@@ -192,11 +197,10 @@ function setBirthdayMode(mode) {
   document.body.classList.toggle("is-birthday", mode === "birthday");
 
   if (birthdaySubtitle) {
-    birthdaySubtitle.textContent = mode === "countdown"
-      ? "THE NEXT TRANSMISSION ARRIVES NOVEMBER 9"
-      : mode === "birthday"
-        ? "ALL SIGNALS POINT TO YOU // HAPPY BIRTHDAY"
-        : defaultBirthdaySubtitle;
+    birthdaySubtitle.hidden = mode === "countdown";
+    birthdaySubtitle.textContent = mode === "birthday"
+      ? "ALL SIGNALS POINT TO YOU // HAPPY BIRTHDAY"
+      : defaultBirthdaySubtitle;
   }
 
   if (mode === "birthday") {
@@ -347,6 +351,61 @@ function stopBirthdayFireworks() {
 
 updateBirthdayExperience();
 window.setInterval(updateBirthdayExperience, 1000);
+
+let fireworksTestTimeout = 0;
+
+function setDebugPanelOpen(open) {
+  if (!debugPanel || !debugPanelToggle) return;
+  debugPanel.classList.toggle("is-open", open);
+  debugPanel.setAttribute("aria-hidden", String(!open));
+  debugPanel.inert = !open;
+  debugPanelToggle.setAttribute("aria-expanded", String(open));
+  debugPanelToggle.setAttribute("aria-label", open ? "Закрыть панель отладки" : "Открыть панель отладки");
+  if (open) debugPanel.removeAttribute("hidden");
+}
+
+if (debugMode) {
+  document.body.classList.add("debug-mode");
+  debugPanel?.removeAttribute("hidden");
+  debugPanelToggle?.removeAttribute("hidden");
+}
+
+debugPanelToggle?.addEventListener("click", () => {
+  setDebugPanelOpen(debugPanel?.getAttribute("aria-hidden") === "true");
+});
+
+debugPanelClose?.addEventListener("click", () => {
+  setDebugPanelOpen(false);
+  debugPanelToggle?.focus({ preventScroll: true });
+});
+
+fireworksTestButton?.addEventListener("click", () => {
+  if (!debugMode || fireworksTestButton.disabled) return;
+  if (birthdayReducedMotion.matches) {
+    fireworksTestButton.textContent = "MOTION REDUCED";
+    fireworksTestButton.disabled = true;
+    window.setTimeout(() => {
+      fireworksTestButton.textContent = "LAUNCH";
+      fireworksTestButton.disabled = false;
+    }, 1600);
+    return;
+  }
+
+  fireworksTestButton.disabled = true;
+  fireworksTestButton.textContent = "FIRING…";
+  birthdayFireworksCanvas?.removeAttribute("hidden");
+  startBirthdayFireworks();
+  if (fireworksTestTimeout) window.clearTimeout(fireworksTestTimeout);
+  fireworksTestTimeout = window.setTimeout(() => {
+    if (birthdayMode !== "birthday") {
+      stopBirthdayFireworks();
+      birthdayFireworksCanvas?.setAttribute("hidden", "");
+    }
+    fireworksTestButton.disabled = false;
+    fireworksTestButton.textContent = "LAUNCH";
+    fireworksTestTimeout = 0;
+  }, 7000);
+});
 
 window.setTimeout(() => {
   document.body.classList.add("is-loaded");
