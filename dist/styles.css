@@ -404,13 +404,6 @@ body.is-night .landing-footer {
   place-items: center;
 }
 
-.player-artwork-placeholder img {
-  width: 35px;
-  height: 35px;
-  object-fit: contain;
-  opacity: 0.78;
-}
-
 .player-artwork-equalizer {
   position: absolute;
   right: 5px;

@@ -25,14 +25,46 @@ function readText(value) {
 function getCover(images) {
   if (!Array.isArray(images)) return "";
 
-  const cover = readText(images.find((image) => image?.size === "extralarge")?.["#text"]);
-  return cover.includes(PLACEHOLDER_ARTWORK) ? "" : cover;
+  const preferredSizes = ["extralarge", "mega", "large", "medium", "small"];
+  for (const size of preferredSizes) {
+    const cover = readText(images.find((image) => image?.size === size)?.["#text"]);
+    if (cover.startsWith("https://") && !cover.includes(PLACEHOLDER_ARTWORK)) return cover;
+  }
+
+  return "";
 }
 
 function getTrack(recentTracks) {
   const tracks = recentTracks?.track;
   if (Array.isArray(tracks)) return tracks[0] || null;
   return tracks || null;
+}
+
+async function getTrackInfoCover(track, apiKey) {
+  const artist = readText(track?.artist?.["#text"] || track?.artist?.name);
+  const title = readText(track?.name);
+  if (!artist || !title) return "";
+
+  const apiUrl = new URL("https://ws.audioscrobbler.com/2.0/");
+  apiUrl.search = new URLSearchParams({
+    method: "track.getInfo",
+    artist,
+    track: title,
+    api_key: apiKey,
+    format: "json",
+  }).toString();
+
+  try {
+    const response = await fetch(apiUrl, {
+      cf: { cacheTtl: 10, cacheEverything: true },
+    });
+    if (!response.ok) return "";
+
+    const result = await response.json();
+    return getCover(result?.track?.album?.image) || getCover(result?.track?.image);
+  } catch {
+    return "";
+  }
 }
 
 export default {
@@ -93,12 +125,13 @@ export default {
       }
 
       const track = getTrack(result?.recenttracks);
+      const cover = getCover(track?.image) || await getTrackInfoCover(track, env.LASTFM_API_KEY);
       const payload = {
         nowplaying: track?.["@attr"]?.nowplaying === "true",
         title: readText(track?.name),
         artist: readText(track?.artist?.["#text"] || track?.artist?.name),
         album: readText(track?.album?.["#text"]),
-        cover: getCover(track?.image),
+        cover,
       };
 
       return jsonResponse(payload, 200, origin, allowedOrigins);

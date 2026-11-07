@@ -15,6 +15,6 @@
 
 ## Музыкальный плеер
 
-Карточка показывает текущий трек Last.fm или последний прослушанный трек профиля `omnipotence88`. Браузер получает данные через обычный Cloudflare Worker по адресу `https://lastfm-now-playing.toriymii.workers.dev/lastfm`; запрос обновляется раз в 30 секунд, Worker кеширует ответ Last.fm на 10 секунд. Last.fm выставляет `nowplaying="true"`, когда подключённый музыкальный сервис передаёт этот статус. [Документация Last.fm](https://www.last.fm/api/show/user.getRecentTracks)
+Карточка показывает текущий трек Last.fm или последний прослушанный трек профиля `omnipotence88`. Браузер получает данные через обычный Cloudflare Worker по адресу `https://lastfm-now-playing.toriymii.workers.dev/lastfm`; запрос обновляется раз в 30 секунд. Worker берёт обложку из доступных размеров `user.getrecenttracks`, а если там нет изображения — запрашивает `track.getInfo`. [Документация Last.fm](https://www.last.fm/api/show/user.getRecentTracks)
 
 Исходники Worker и его настройки находятся в `lastfm-worker/`. Секрет `LASTFM_API_KEY` хранится в настройках Worker Cloudflare и не включается в сайт или Git. Для локальной разработки укажите его в `lastfm-worker/.dev.vars`; этот файл исключён из Git. [Секреты Cloudflare Workers](https://developers.cloudflare.com/workers/configuration/secrets/)
