@@ -486,11 +486,12 @@ body.is-night .social-card:hover {
 }
 
 body.is-night .social-icon {
-  border-color: rgba(190, 181, 255, 0.3);
+  border-color: rgba(var(--teal-rgb), 0.42);
+  background: rgba(var(--teal-rgb), 0.08);
 }
 
-body.is-night .telegram-mark {
-  border-color: rgba(109, 148, 139, 0.82);
+body.is-night .social-icon img {
+  filter: brightness(0) saturate(100%) invert(78%) sepia(16%) saturate(1354%) hue-rotate(199deg) brightness(103%) contrast(102%);
 }
 
 body.is-night .social-copy small {
@@ -912,6 +913,7 @@ body.is-night .player-artwork {
   height: 32px;
   display: block;
   object-fit: contain;
+  transition: filter 850ms ease;
 }
 
 .social-copy {

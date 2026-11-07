@@ -2,7 +2,6 @@ const loadingScreen = document.querySelector(".loading-screen");
 const landingContent = document.querySelector(".landing-content");
 const themeToggle = document.querySelector("#theme-toggle");
 const themeColorMeta = document.querySelector('meta[name="theme-color"]');
-const siteFavicon = document.querySelector("#site-favicon");
 const nowPlayingCard = document.querySelector("#now-playing");
 const playerStatus = document.querySelector("#player-status");
 const playerTrack = document.querySelector("#player-track");
@@ -105,9 +104,6 @@ function setNightTheme(enabled) {
   themeToggle?.setAttribute("aria-pressed", String(enabled));
   themeToggle?.setAttribute("aria-label", enabled ? "Вернуть исходную тему" : "Включить тёмную тему");
   themeColorMeta?.setAttribute("content", enabled ? "#090914" : "#050403");
-  siteFavicon?.setAttribute("type", enabled ? "image/png" : "image/svg+xml");
-  siteFavicon?.setAttribute("sizes", enabled ? "128x128" : "any");
-  siteFavicon?.setAttribute("href", enabled ? "./assets/favicon-night.png?v=2" : "./assets/favicon.svg?v=3");
 }
 
 try {
