@@ -259,11 +259,11 @@ function launchBirthdayFirework() {
 }
 
 function burstBirthdayFirework(rocket) {
-  const particleCount = 38 + Math.floor(Math.random() * 20);
+  const particleCount = 72 + Math.floor(Math.random() * 24);
   for (let index = 0; index < particleCount; index += 1) {
     const angle = (Math.PI * 2 * index) / particleCount + (Math.random() - 0.5) * 0.08;
-    const speed = 1.2 + Math.random() * 3.3;
-    const life = 48 + Math.random() * 32;
+    const speed = 1.7 + Math.random() * 4.2;
+    const life = 56 + Math.random() * 36;
     birthdayParticles.push({
       x: rocket.x,
       y: rocket.y,
@@ -273,7 +273,7 @@ function burstBirthdayFirework(rocket) {
       life,
       maxLife: life,
       color: rocket.color,
-      size: 1 + Math.random() * 1.4,
+      size: 1.5 + Math.random() * 2.1,
     });
   }
 }
@@ -283,7 +283,7 @@ function drawBirthdayFireworks(timestamp) {
   const context = birthdayFireworksContext;
   context.clearRect(0, 0, birthdayCanvasWidth, birthdayCanvasHeight);
 
-  if (timestamp - birthdayLastLaunch > 760) {
+  if (timestamp - birthdayLastLaunch > 380) {
     launchBirthdayFirework();
     birthdayLastLaunch = timestamp;
   }
