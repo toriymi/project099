@@ -1,8 +1,6 @@
 # toriymi // Project8
 > cursed apple — find your way through the city
 
-My first website, created with AI.
-The site has two themes that you can switch between.
 
 [To day] Dark Amber
 A deep black-brown background with a soft golden-amber glow. Accents are in rich gold shades, and the text is a warm cream. It creates a cozy, elegant, and premium atmosphere.
