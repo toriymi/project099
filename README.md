@@ -15,14 +15,6 @@
 
 ## Музыкальный плеер
 
-Карточка под заголовком показывает трек, который Last.fm помечает как `nowplaying`, или последний трек из профиля `omnipotence88`. Данные обновляются раз в 30 секунд; Cloudflare кеширует ответ на 20 секунд.
+Карточка показывает текущий трек Last.fm или последний прослушанный трек профиля `omnipotence88`. Браузер получает данные через обычный Cloudflare Worker по адресу `https://lastfm-now-playing.toriymii.workers.dev/lastfm`; запрос обновляется раз в 30 секунд, Worker кеширует ответ Last.fm на 10 секунд. Last.fm выставляет `nowplaying="true"`, когда подключённый музыкальный сервис передаёт этот статус. [Документация Last.fm](https://www.last.fm/api/show/user.getRecentTracks)
 
-Endpoint `/api/now-playing` находится в `functions/api/now-playing.js` и запускается как Cloudflare Pages Function на Workers. Last.fm API включает текущий трек с `nowplaying="true"`, когда получает этот статус от подключённого музыкального сервиса. [Документация Last.fm](https://www.last.fm/api/show/user.getRecentTracks)
-
-Чтобы запустить локально:
-
-1. Создайте API key на [странице Last.fm API](https://www.last.fm/api/account/create) и включите Spotify scrobbling в настройках Last.fm.
-2. Создайте в корне проекта файл `.dev.vars` со строкой `LASTFM_API_KEY=ваш_ключ`.
-3. Выполните `node scripts/build-pages.mjs`, затем `npx wrangler pages dev dist`.
-
-Для деплоя на Cloudflare Pages укажите build command `node scripts/build-pages.mjs` и output directory `dist`. Добавьте `LASTFM_API_KEY` как Secret в настройках Pages или выполните `npx wrangler pages secret put LASTFM_API_KEY --project-name toriymi-site`. Ключ не добавляйте в сайт или репозиторий. [Secrets Cloudflare](https://developers.cloudflare.com/pages/functions/bindings/)
+Исходники Worker и его настройки находятся в `lastfm-worker/`. Секрет `LASTFM_API_KEY` хранится в настройках Worker Cloudflare и не включается в сайт или Git. Для локальной разработки укажите его в `lastfm-worker/.dev.vars`; этот файл исключён из Git. [Секреты Cloudflare Workers](https://developers.cloudflare.com/workers/configuration/secrets/)

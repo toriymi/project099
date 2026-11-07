@@ -12,6 +12,7 @@ const playerArtwork = document.querySelector("#player-artwork");
 const playerArtworkPlaceholder = document.querySelector("#player-artwork-placeholder");
 const themeStorageKey = "toriymi-theme";
 const lastFmProfileUrl = "https://www.last.fm/user/omnipotence88";
+const lastFmWorkerEndpoint = "https://lastfm-now-playing.toriymii.workers.dev/lastfm";
 let playerRequestPending = false;
 
 function setPlayerState(state, status, track, artist) {
@@ -59,32 +60,33 @@ async function updateNowPlaying() {
   playerRequestPending = true;
 
   try {
-    const response = await fetch("/api/now-playing", {
+    const response = await fetch(lastFmWorkerEndpoint, {
       headers: { Accept: "application/json" },
       cache: "no-store",
     });
     if (!response.ok) throw new Error("The Last.fm worker is unavailable");
 
     const data = await response.json();
-    if (data.status === "idle" || !data.track) {
+    if (data.error) throw new Error(data.error);
+    if (!data.title) {
       setPlayerState("idle", "NO RECENT SIGNAL", "NO TRACK DATA", "Listening status will appear here");
       playerTrackLink.href = lastFmProfileUrl;
       setPlayerArtwork("");
       return;
     }
 
-    const playing = data.status === "playing";
+    const playing = data.nowplaying === true;
     const albumText = data.album ? ` · ${data.album}` : "";
     setPlayerState(
       playing ? "playing" : "recent",
       playing ? "NOW PLAYING" : "LAST SCROBBLE",
-      data.track,
+      data.title,
       `${data.artist || "Unknown artist"}${albumText}`,
     );
-    playerTrackLink.href = getSafeHttpsUrl(data.url) || lastFmProfileUrl;
-    setPlayerArtwork(data.artwork);
+    playerTrackLink.href = lastFmProfileUrl;
+    setPlayerArtwork(data.cover);
   } catch {
-    setPlayerState("error", "SIGNAL UNAVAILABLE", "LAST.FM CONNECTION OFFLINE", "Cloudflare Worker API is not connected");
+    setPlayerState("error", "SIGNAL UNAVAILABLE", "LAST.FM CONNECTION OFFLINE", "Could not load listening data from Last.fm");
     playerTrackLink.href = lastFmProfileUrl;
     setPlayerArtwork("");
   } finally {
