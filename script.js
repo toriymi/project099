@@ -3,9 +3,6 @@ const landingContent = document.querySelector(".landing-content");
 const themeToggle = document.querySelector("#theme-toggle");
 const themeColorMeta = document.querySelector('meta[name="theme-color"]');
 const siteFavicon = document.querySelector("#site-favicon");
-const debugPanel = document.querySelector("#debug-panel");
-const debugPanelToggle = document.querySelector("#debug-panel-toggle");
-const backgroundIconsToggle = document.querySelector("#background-icons-toggle");
 const nowPlayingCard = document.querySelector("#now-playing");
 const playerStatus = document.querySelector("#player-status");
 const playerTrack = document.querySelector("#player-track");
@@ -14,7 +11,6 @@ const playerArtist = document.querySelector("#player-artist");
 const playerArtwork = document.querySelector("#player-artwork");
 const playerArtworkPlaceholder = document.querySelector("#player-artwork-placeholder");
 const themeStorageKey = "toriymi-theme";
-const debugMode = new URLSearchParams(window.location.search).get("debug") === "1";
 const lastFmProfileUrl = "https://www.last.fm/user/omnipotence88";
 let playerRequestPending = false;
 
@@ -100,40 +96,6 @@ updateNowPlaying();
 window.setInterval(updateNowPlaying, 30_000);
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible") updateNowPlaying();
-});
-
-function setBackgroundIcons(enabled) {
-  document.body.classList.toggle("no-background-icons", !enabled);
-  backgroundIconsToggle?.setAttribute("aria-pressed", String(enabled));
-  backgroundIconsToggle?.setAttribute("aria-label", enabled ? "Выключить фоновые иконки" : "Включить фоновые иконки");
-  const stateLabel = backgroundIconsToggle?.querySelector(".debug-toggle-value");
-  if (stateLabel) stateLabel.textContent = enabled ? "ON" : "OFF";
-}
-
-function setDebugPanelOpen(open) {
-  debugPanel?.classList.toggle("is-open", open);
-  debugPanel?.setAttribute("aria-hidden", String(!open));
-  if (debugPanel) debugPanel.inert = !open;
-  debugPanelToggle?.setAttribute("aria-expanded", String(open));
-  debugPanelToggle?.setAttribute("aria-label", open ? "Закрыть панель отладки" : "Открыть панель отладки");
-  if (open) backgroundIconsToggle?.focus({ preventScroll: true });
-}
-
-if (debugMode) {
-  document.body.classList.add("debug-mode");
-  debugPanelToggle?.removeAttribute("hidden");
-  setDebugPanelOpen(false);
-  setBackgroundIcons(true);
-}
-
-debugPanelToggle?.addEventListener("click", () => {
-  if (!debugMode) return;
-  setDebugPanelOpen(!debugPanel?.classList.contains("is-open"));
-});
-
-backgroundIconsToggle?.addEventListener("click", () => {
-  if (!debugMode) return;
-  setBackgroundIcons(document.body.classList.contains("no-background-icons"));
 });
 
 function setNightTheme(enabled) {

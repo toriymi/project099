@@ -11,7 +11,6 @@
     <script src="dynamic-title.js" defer></script>
   </head>
   <body>
-    <div class="night-pattern" aria-hidden="true"></div>
     <section class="loading-screen" role="status" aria-label="Загрузка сайта" aria-live="polite">
       <div class="loading-seal" aria-hidden="true">
         <svg viewBox="0 0 160 160" role="presentation">
@@ -57,20 +56,6 @@
         </div>
         <a class="player-profile-link" href="https://www.last.fm/user/omnipotence88" target="_blank" rel="noreferrer" aria-label="Открыть профиль Last.fm">↗</a>
       </section>
-
-      <aside class="debug-panel" id="debug-panel" aria-label="Панель отладки" aria-hidden="true" inert>
-        <div class="debug-panel-heading"><span>DEBUG MODE <span class="slash">//</span> VISUAL TEST</span><a href="./">EXIT DEBUG</a></div>
-        <div class="debug-panel-body">
-          <div class="debug-panel-copy"><strong>BACKGROUND ICONS</strong><small>Toggle background pattern</small></div>
-          <button class="debug-toggle" id="background-icons-toggle" type="button" aria-label="Выключить фоновые иконки" aria-pressed="true">
-            <span class="debug-toggle-indicator" aria-hidden="true"></span><span class="debug-toggle-value">ON</span>
-          </button>
-        </div>
-      </aside>
-      <button class="debug-launcher" id="debug-panel-toggle" type="button" aria-label="Открыть панель отладки" aria-expanded="false" hidden>
-        <img src="./assets/debug-button.png" alt="" />
-        <span class="debug-launcher-label" aria-hidden="true">DBG</span>
-      </button>
 
       <nav class="social-links" aria-label="Социальные сети">
         <a class="social-card" href="https://t.me/wesel88" target="_blank" rel="noreferrer">
