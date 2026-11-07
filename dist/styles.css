@@ -458,6 +458,11 @@ body.is-night .social-icon {
   border-color: rgba(190, 181, 255, 0.3);
 }
 
+body.is-night .telegram-mark {
+  border-color: rgba(109, 148, 139, 0.82);
+  background: rgba(109, 148, 139, 0.15);
+}
+
 body.is-night .social-copy small {
   color: rgba(229, 227, 247, 0.62);
 }
@@ -865,10 +870,11 @@ body.is-night .player-artwork {
   transition: border-color 850ms ease, color 850ms ease;
 }
 
-.telegram-mark { border-color: rgba(var(--teal-rgb), 0.4); }
+.telegram-mark {
+  border-color: rgba(109, 148, 139, 0.78);
+  background: rgba(109, 148, 139, 0.12);
+}
 .discord-mark { border-color: rgba(var(--cream-rgb), 0.3); }
-.lastfm-mark { border-color: rgba(var(--amber-rgb), 0.42); }
-.spotify-mark { border-color: rgba(var(--teal-rgb), 0.5); }
 .steam-mark { border-color: rgba(var(--cream-rgb), 0.42); }
 .tiktok-mark { border-color: rgba(var(--rust-rgb), 0.55); }
 
