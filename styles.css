@@ -278,6 +278,11 @@ body.is-loaded .landing-content {
   padding-top: 14px;
 }
 
+.debug-panel-body + .debug-panel-body {
+  margin-top: 14px;
+  border-top: 1px solid rgba(var(--cream-rgb), 0.1);
+}
+
 .debug-panel-copy {
   display: grid;
   gap: 5px;

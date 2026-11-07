@@ -137,6 +137,7 @@ const debugPanel = document.querySelector("#debug-panel");
 const debugPanelToggle = document.querySelector("#debug-panel-toggle");
 const debugPanelClose = document.querySelector("#debug-panel-close");
 const fireworksTestButton = document.querySelector("#fireworks-test");
+const themeTestButton = document.querySelector("#theme-test");
 const debugMode = new URLSearchParams(window.location.search).get("debug") === "1";
 const moscowDateFormatter = new Intl.DateTimeFormat("en-US", {
   calendar: "gregory",
@@ -364,10 +365,16 @@ function setDebugPanelOpen(open) {
   if (open) debugPanel.removeAttribute("hidden");
 }
 
+function updateDebugThemeButton() {
+  if (!themeTestButton) return;
+  themeTestButton.textContent = document.body.classList.contains("is-night") ? "TO DAY" : "TO NIGHT";
+}
+
 if (debugMode) {
   document.body.classList.add("debug-mode");
   debugPanel?.removeAttribute("hidden");
   debugPanelToggle?.removeAttribute("hidden");
+  updateDebugThemeButton();
 }
 
 debugPanelToggle?.addEventListener("click", () => {
@@ -378,6 +385,9 @@ debugPanelClose?.addEventListener("click", () => {
   setDebugPanelOpen(false);
   debugPanelToggle?.focus({ preventScroll: true });
 });
+
+themeTestButton?.addEventListener("click", () => themeToggle?.click());
+themeToggle?.addEventListener("click", updateDebugThemeButton);
 
 fireworksTestButton?.addEventListener("click", () => {
   if (!debugMode || fireworksTestButton.disabled) return;
