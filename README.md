@@ -1,7 +1,7 @@
 # toriymi // Project8
 > cursed apple — find your way through the city
 
-My first website, created in 12 hours.
+My first website, created with AI.
 The site has two themes that you can switch between.
 
 [To day] Dark Amber
