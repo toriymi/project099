@@ -17,7 +17,7 @@
 
   var config = {
     // Список фраз. Каждый цикл выбирается случайная (не та же, что была).
-    phrases: ["njoiu.dev", "yoshi made a game", "six seven", "Despite everything, it's still you", "toriymi", "cursed apple",],
+    phrases: ["yoshi made a game", "six seven", "Despite everything, it's still you", "toriymi", "cursed apple"],
     // Скорость смены символа в одной позиции, мс ("быстро, но не мгновенно")
     tick: 35,
     // Задержка между стартом соседних позиций, мс (эффект "построения" слева направо)
