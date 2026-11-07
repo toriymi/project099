@@ -11,6 +11,7 @@
     <script src="dynamic-title.js" defer></script>
   </head>
   <body>
+    <canvas class="birthday-fireworks" id="birthday-fireworks" aria-hidden="true" hidden></canvas>
     <section class="loading-screen" role="status" aria-label="Загрузка сайта" aria-live="polite">
       <div class="loading-seal" aria-hidden="true">
         <svg viewBox="0 0 160 160" role="presentation">
@@ -24,8 +25,8 @@
         </svg>
       </div>
 
-      <p class="loading-kicker"><span class="signal-light" aria-hidden="true"></span> TORIYMI <span class="slash">//</span> CITY SECTOR 04</p>
-      <h1 class="loading-title">THE OTHER<br /><span>SIDE</span></h1>
+      <p class="loading-kicker"><span class="signal-light" aria-hidden="true"></span> TORIYMI <span class="slash">//</span> Project8</p>
+      <h1 class="loading-title">cursed<br /><span>apple</span></h1>
       <p class="loading-subtitle">OPENING THE VEIL</p>
 
       <div class="loading-status" role="status" aria-live="polite">
@@ -36,9 +37,26 @@
 
     <main class="landing-content" aria-label="Основная страница" aria-hidden="true" inert>
       <header class="landing-heading">
-        <p class="landing-kicker"><button class="theme-toggle" id="theme-toggle" type="button" aria-label="Включить тёмную тему" aria-pressed="false"><span class="theme-glyph theme-star" aria-hidden="true">✳</span><span class="theme-glyph theme-moon" aria-hidden="true">☾</span></button> TORIYMI <span class="slash">//</span> CITY SECTOR 04</p>
-        <h1 class="landing-title">THE OTHER<br /><span>SIDE</span></h1>
-        <p class="landing-subtitle">FIND YOUR WAY THROUGH THE CITY</p>
+        <p class="landing-kicker"><button class="theme-toggle" id="theme-toggle" type="button" aria-label="Включить тёмную тему" aria-pressed="false"><span class="theme-glyph theme-star" aria-hidden="true">✳</span><span class="theme-glyph theme-moon" aria-hidden="true">☾</span></button> TORIYMI <span class="slash">//</span> Project8</p>
+        <h1 class="landing-title" id="landing-title">cursed<br /><span>apple</span></h1>
+        <section class="birthday-countdown" id="birthday-countdown" aria-label="Обратный отсчёт до 9 ноября" hidden>
+          <p class="birthday-kicker">BIRTHDAY APPROACHING</p>
+          <div class="birthday-countdown-clock" role="timer" aria-live="off">
+            <span class="birthday-countdown-unit"><strong data-countdown-days>00</strong><small>DAYS</small></span>
+            <span class="birthday-countdown-separator" aria-hidden="true">:</span>
+            <span class="birthday-countdown-unit"><strong data-countdown-hours>00</strong><small>HRS</small></span>
+            <span class="birthday-countdown-separator" aria-hidden="true">:</span>
+            <span class="birthday-countdown-unit"><strong data-countdown-minutes>00</strong><small>MIN</small></span>
+            <span class="birthday-countdown-separator" aria-hidden="true">:</span>
+            <span class="birthday-countdown-unit"><strong data-countdown-seconds>00</strong><small>SEC</small></span>
+          </div>
+          <p class="birthday-caption">UNTIL NOVEMBER 9 // MOSCOW TIME</p>
+        </section>
+        <div class="birthday-celebration" id="birthday-celebration" hidden>
+          <p class="birthday-kicker">09 NOV // SPECIAL TRANSMISSION</p>
+          <h2 class="landing-title">HAPPY<br /><span>BIRTHDAY</span></h2>
+        </div>
+        <p class="landing-subtitle" id="landing-subtitle">FIND YOUR WAY THROUGH THE CITY</p>
       </header>
 
       <section class="now-playing" id="now-playing" data-state="loading" aria-label="Сейчас играет" aria-live="polite">

@@ -126,6 +126,228 @@ themeToggle?.addEventListener("click", () => {
   }
 });
 
+const birthdayTitle = document.querySelector("#landing-title");
+const birthdayCountdown = document.querySelector("#birthday-countdown");
+const birthdayCelebration = document.querySelector("#birthday-celebration");
+const birthdaySubtitle = document.querySelector("#landing-subtitle");
+const birthdayFireworksCanvas = document.querySelector("#birthday-fireworks");
+const birthdayFireworksContext = birthdayFireworksCanvas?.getContext("2d");
+const birthdayReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const moscowDateFormatter = new Intl.DateTimeFormat("en-US", {
+  calendar: "gregory",
+  timeZone: "Europe/Moscow",
+  year: "numeric",
+  month: "numeric",
+  day: "numeric",
+  hour: "numeric",
+  minute: "numeric",
+  second: "numeric",
+  hourCycle: "h23",
+});
+const defaultBirthdaySubtitle = birthdaySubtitle?.textContent || "";
+const birthdayCountdownValues = {
+  days: birthdayCountdown?.querySelector("[data-countdown-days]"),
+  hours: birthdayCountdown?.querySelector("[data-countdown-hours]"),
+  minutes: birthdayCountdown?.querySelector("[data-countdown-minutes]"),
+  seconds: birthdayCountdown?.querySelector("[data-countdown-seconds]"),
+};
+const birthdayFireworkColors = ["#f0ad0b", "#f08b83", "#ca8a0a", "#f5dfaf", "#b9adff", "#75d8cb"];
+let birthdayMode = "normal";
+let birthdayAnimationFrame = 0;
+let birthdayLastLaunch = 0;
+let birthdayCanvasWidth = 0;
+let birthdayCanvasHeight = 0;
+let birthdayRockets = [];
+let birthdayParticles = [];
+
+function getMoscowDateParts(date) {
+  const parts = moscowDateFormatter.formatToParts(date);
+  return Object.fromEntries(
+    parts.filter((part) => part.type !== "literal").map((part) => [part.type, Number(part.value)]),
+  );
+}
+
+function getMoscowMidnight(year, monthIndex, day) {
+  const targetUtc = Date.UTC(year, monthIndex, day);
+  const partsAtUtcGuess = getMoscowDateParts(new Date(targetUtc));
+  const representedAsUtc = Date.UTC(
+    partsAtUtcGuess.year,
+    partsAtUtcGuess.month - 1,
+    partsAtUtcGuess.day,
+    partsAtUtcGuess.hour,
+    partsAtUtcGuess.minute,
+    partsAtUtcGuess.second,
+  );
+  const offset = representedAsUtc - targetUtc;
+  return new Date(targetUtc - offset);
+}
+
+function setBirthdayMode(mode) {
+  if (birthdayMode === mode) return;
+  birthdayMode = mode;
+
+  if (birthdayTitle) birthdayTitle.hidden = mode !== "normal";
+  if (birthdayCountdown) birthdayCountdown.hidden = mode !== "countdown";
+  if (birthdayCelebration) birthdayCelebration.hidden = mode !== "birthday";
+  document.body.classList.toggle("is-birthday", mode === "birthday");
+
+  if (birthdaySubtitle) {
+    birthdaySubtitle.textContent = mode === "countdown"
+      ? "THE NEXT TRANSMISSION ARRIVES NOVEMBER 9"
+      : mode === "birthday"
+        ? "ALL SIGNALS POINT TO YOU // HAPPY BIRTHDAY"
+        : defaultBirthdaySubtitle;
+  }
+
+  if (mode === "birthday") {
+    birthdayFireworksCanvas?.removeAttribute("hidden");
+    if (!birthdayReducedMotion.matches) startBirthdayFireworks();
+  } else {
+    stopBirthdayFireworks();
+    birthdayFireworksCanvas?.setAttribute("hidden", "");
+  }
+}
+
+function updateBirthdayCountdown(now, year) {
+  const birthdayInstant = getMoscowMidnight(year, 10, 9);
+  const totalSeconds = Math.max(0, Math.floor((birthdayInstant.getTime() - now.getTime()) / 1000));
+  const days = Math.floor(totalSeconds / 86_400);
+  const hours = Math.floor((totalSeconds % 86_400) / 3_600);
+  const minutes = Math.floor((totalSeconds % 3_600) / 60);
+  const seconds = totalSeconds % 60;
+
+  for (const [unit, value] of Object.entries({ days, hours, minutes, seconds })) {
+    if (birthdayCountdownValues[unit]) birthdayCountdownValues[unit].textContent = String(value).padStart(2, "0");
+  }
+}
+
+function updateBirthdayExperience() {
+  const now = new Date();
+  const moscowToday = getMoscowDateParts(now);
+  const countdownWeek = moscowToday.month === 11 && moscowToday.day >= 2 && moscowToday.day < 9;
+  const isBirthday = moscowToday.month === 11 && moscowToday.day === 9;
+
+  if (isBirthday) {
+    setBirthdayMode("birthday");
+  } else if (countdownWeek) {
+    setBirthdayMode("countdown");
+    updateBirthdayCountdown(now, moscowToday.year);
+  } else {
+    setBirthdayMode("normal");
+  }
+}
+
+function resizeBirthdayCanvas() {
+  if (!birthdayFireworksCanvas || !birthdayFireworksContext) return;
+  const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+  birthdayCanvasWidth = window.innerWidth;
+  birthdayCanvasHeight = window.innerHeight;
+  birthdayFireworksCanvas.width = Math.round(birthdayCanvasWidth * pixelRatio);
+  birthdayFireworksCanvas.height = Math.round(birthdayCanvasHeight * pixelRatio);
+  birthdayFireworksContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+}
+
+function launchBirthdayFirework() {
+  const color = birthdayFireworkColors[Math.floor(Math.random() * birthdayFireworkColors.length)];
+  const x = birthdayCanvasWidth * (0.08 + Math.random() * 0.84);
+  const targetY = birthdayCanvasHeight * (0.16 + Math.random() * 0.42);
+  birthdayRockets.push({ x, y: birthdayCanvasHeight + 8, targetY, speed: 4.5 + Math.random() * 2.2, color });
+}
+
+function burstBirthdayFirework(rocket) {
+  const particleCount = 38 + Math.floor(Math.random() * 20);
+  for (let index = 0; index < particleCount; index += 1) {
+    const angle = (Math.PI * 2 * index) / particleCount + (Math.random() - 0.5) * 0.08;
+    const speed = 1.2 + Math.random() * 3.3;
+    const life = 48 + Math.random() * 32;
+    birthdayParticles.push({
+      x: rocket.x,
+      y: rocket.y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      gravity: 0.035 + Math.random() * 0.025,
+      life,
+      maxLife: life,
+      color: rocket.color,
+      size: 1 + Math.random() * 1.4,
+    });
+  }
+}
+
+function drawBirthdayFireworks(timestamp) {
+  if (!birthdayFireworksContext) return;
+  const context = birthdayFireworksContext;
+  context.clearRect(0, 0, birthdayCanvasWidth, birthdayCanvasHeight);
+
+  if (timestamp - birthdayLastLaunch > 760) {
+    launchBirthdayFirework();
+    birthdayLastLaunch = timestamp;
+  }
+
+  for (let index = birthdayRockets.length - 1; index >= 0; index -= 1) {
+    const rocket = birthdayRockets[index];
+    const previousY = rocket.y;
+    rocket.y -= rocket.speed;
+    context.globalAlpha = 0.8;
+    context.strokeStyle = rocket.color;
+    context.lineWidth = 1.5;
+    context.beginPath();
+    context.moveTo(rocket.x, previousY + 9);
+    context.lineTo(rocket.x, rocket.y);
+    context.stroke();
+
+    if (rocket.y <= rocket.targetY) {
+      burstBirthdayFirework(rocket);
+      birthdayRockets.splice(index, 1);
+    }
+  }
+
+  context.globalAlpha = 1;
+  for (let index = birthdayParticles.length - 1; index >= 0; index -= 1) {
+    const particle = birthdayParticles[index];
+    particle.x += particle.vx;
+    particle.y += particle.vy;
+    particle.vy += particle.gravity;
+    particle.vx *= 0.986;
+    particle.vy *= 0.986;
+    particle.life -= 1;
+
+    if (particle.life <= 0) {
+      birthdayParticles.splice(index, 1);
+      continue;
+    }
+
+    context.globalAlpha = particle.life / particle.maxLife;
+    context.fillStyle = particle.color;
+    context.beginPath();
+    context.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+    context.fill();
+  }
+
+  context.globalAlpha = 1;
+  birthdayAnimationFrame = window.requestAnimationFrame(drawBirthdayFireworks);
+}
+
+function startBirthdayFireworks() {
+  if (!birthdayFireworksCanvas || !birthdayFireworksContext || birthdayAnimationFrame || birthdayReducedMotion.matches) return;
+  resizeBirthdayCanvas();
+  window.addEventListener("resize", resizeBirthdayCanvas);
+  birthdayLastLaunch = 0;
+  birthdayAnimationFrame = window.requestAnimationFrame(drawBirthdayFireworks);
+}
+
+function stopBirthdayFireworks() {
+  if (birthdayAnimationFrame) window.cancelAnimationFrame(birthdayAnimationFrame);
+  birthdayAnimationFrame = 0;
+  birthdayRockets = [];
+  birthdayParticles = [];
+  window.removeEventListener("resize", resizeBirthdayCanvas);
+  birthdayFireworksContext?.clearRect(0, 0, birthdayCanvasWidth, birthdayCanvasHeight);
+}
+
+updateBirthdayExperience();
+window.setInterval(updateBirthdayExperience, 1000);
+
 window.setTimeout(() => {
   document.body.classList.add("is-loaded");
   loadingScreen?.setAttribute("aria-hidden", "true");

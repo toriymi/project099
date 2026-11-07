@@ -197,6 +197,19 @@ body.is-loaded .landing-content {
   align-items: center;
 }
 
+.birthday-fireworks {
+  position: fixed;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.birthday-fireworks[hidden] {
+  display: none;
+}
+
 .landing-kicker {
   display: flex;
   align-items: center;
@@ -336,6 +349,92 @@ body.is-night .landing-footer {
   font-size: 9px;
   letter-spacing: 0.25em;
   transition: color 850ms ease;
+}
+
+.birthday-countdown {
+  min-height: 138px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  padding: 4px 0;
+}
+
+.birthday-countdown[hidden],
+.birthday-celebration[hidden] {
+  display: none;
+}
+
+.birthday-kicker {
+  margin: 0;
+  color: var(--teal);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  transition: color 850ms ease;
+}
+
+.birthday-countdown-clock {
+  display: flex;
+  align-items: center;
+  gap: clamp(7px, 2.2vw, 18px);
+  color: var(--cream);
+  font-variant-numeric: tabular-nums;
+}
+
+.birthday-countdown-unit {
+  min-width: clamp(42px, 8vw, 72px);
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+}
+
+.birthday-countdown-unit strong {
+  font-size: clamp(25px, 5.8vw, 48px);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  text-shadow: 0 0 24px rgba(var(--amber-rgb), 0.18);
+}
+
+.birthday-countdown-unit small {
+  color: rgba(var(--cream-rgb), 0.58);
+  font-size: 7px;
+  letter-spacing: 0.16em;
+}
+
+.birthday-countdown-separator {
+  align-self: flex-start;
+  margin-top: 2px;
+  color: rgba(var(--amber-rgb), 0.7);
+  font-size: clamp(20px, 4.2vw, 34px);
+  line-height: 1;
+}
+
+.birthday-caption {
+  margin: 0;
+  color: rgba(var(--cream-rgb), 0.5);
+  font-size: 7px;
+  letter-spacing: 0.15em;
+}
+
+.birthday-celebration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 13px;
+}
+
+.birthday-celebration .landing-title {
+  text-shadow: 0 0 42px rgba(var(--amber-rgb), 0.26);
+}
+
+body.is-birthday .landing-subtitle {
+  color: var(--amber);
+}
+
+body.is-birthday .birthday-kicker {
+  color: var(--amber);
 }
 
 .social-links {
@@ -867,6 +966,9 @@ body.is-night .player-artwork {
   .player-kicker { gap: 5px; font-size: 7px; }
   .player-source { font-size: 6px; }
   .player-profile-link { width: 24px; height: 24px; }
+  .birthday-countdown { min-height: 124px; gap: 11px; }
+  .birthday-countdown-clock { gap: 6px; }
+  .birthday-countdown-unit { min-width: 39px; }
 }
 
 @media (max-width: 720px) {
