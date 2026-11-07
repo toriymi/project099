@@ -9,6 +9,6 @@ A deep black-brown background with a soft golden-amber glow. Accents are in rich
 [To night] Midnight Violet
 A deep black background with a soft blue-violet glow. Accents are in lavender and cool violet shades, and the text is a light gray-lavender. It creates a calm, mysterious, and futuristic atmosphere.
 
-Thanks to {123} for the help in building the site.
+Thanks to [z3n](https://github.com/z3nghoul) for the help in building the site.
 
 🌐 Website: https://toriymi.github.io/site/
