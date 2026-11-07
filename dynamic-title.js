@@ -7,7 +7,7 @@
  *
  * Или с настройками (до подключения скрипта):
  *   <script>
- *     window.DYNAMIC_TITLE = { phrases: ["z3n1337.dev", "portfolio"], tick: 30 };
+ *     window.DYNAMIC_TITLE = { phrases: ["https://toriymi.github.io/site/", "portfolio"], tick: 30 };
  *   </script>
  */
 (function () {
@@ -17,7 +17,7 @@
 
   var config = {
     // Список фраз. Каждый цикл выбирается случайная (не та же, что была).
-    phrases: ["njoiu.dev", "yoshi made a game", "six seven", "Despite everything, it's still you"],
+    phrases: ["njoiu.dev", "yoshi made a game", "six seven", "Despite everything, it's still you", "toriymi", "cursed apple",],
     // Скорость смены символа в одной позиции, мс ("быстро, но не мгновенно")
     tick: 35,
     // Задержка между стартом соседних позиций, мс (эффект "построения" слева направо)
